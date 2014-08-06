@@ -533,7 +533,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         txtLog.setEditable(false);
         txtLog.setColumns(20);
-        txtLog.setFont(new java.awt.Font("Tahoma", 0, 9)); // NOI18N
+        txtLog.setFont(new java.awt.Font("Courier New", 0, 12)); // NOI18N
         txtLog.setRows(5);
         spLog.setViewportView(txtLog);
 
@@ -554,7 +554,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         txtChatLog.setEditable(false);
         txtChatLog.setColumns(20);
-        txtChatLog.setFont(new java.awt.Font("Tahoma", 0, 9)); // NOI18N
+        txtChatLog.setFont(new java.awt.Font("Courier New", 0, 12)); // NOI18N
         txtChatLog.setRows(5);
         scChatLog.setViewportView(txtChatLog);
 
@@ -897,6 +897,9 @@ public class MainFrame extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Unable to start process: " + ex.toString(), "Launch error", JOptionPane.ERROR_MESSAGE);
             return;
         }
+        
+        // Save memory value
+        ConfigManager.getInstance().getProperties().setProperty("memory", memValue);
 
         StreamGobbler errorGobbler = new StreamGobbler(process.getErrorStream());
         StreamGobbler outputGobbler = new StreamGobbler(process.getInputStream());
