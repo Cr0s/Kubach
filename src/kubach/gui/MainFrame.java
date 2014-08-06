@@ -150,6 +150,7 @@ public class MainFrame extends javax.swing.JFrame {
             // Just downloaded package, extract it
             if (file.getPath().endsWith(".package")) {
                 ExtractingDialog ed = new ExtractingDialog(this, false, file);
+                ed.setVisible(true);
             }
         }
 
