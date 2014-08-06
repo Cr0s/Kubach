@@ -9,11 +9,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintStream;
-import java.lang.ProcessBuilder.Redirect;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
@@ -1009,6 +1007,7 @@ public class MainFrame extends javax.swing.JFrame {
     
     private void updateLogArea(final String text) {
         SwingUtilities.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 txtLog.append(text);
             }
