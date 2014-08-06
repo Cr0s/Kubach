@@ -10,6 +10,10 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.lang.ProcessBuilder.Redirect;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
@@ -17,7 +21,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JProgressBar;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
-import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
@@ -31,6 +34,8 @@ import kubach.workers.AuthWorker;
 import kubach.workers.ChangePasswordWorker;
 import kubach.workers.DownloadFileWorker;
 import kubach.workers.LoadCaptchaWorker;
+import kubach.workers.ProcessMonitorWorker;
+import kubach.workers.ProcessMonitorWorker.ProcessState;
 import kubach.workers.RemoveSkinWorker;
 import kubach.workers.RequestFilesListWorker;
 import kubach.workers.UploadSkinWorker;
@@ -49,6 +54,8 @@ public class MainFrame extends javax.swing.JFrame {
     private int numFilesToSync, numFilesSynced;
     private PacketFilesList p;
     private SyncState syncState = SyncState.WAITING;
+    private boolean expectExit;
+    private Process process;
 
     public void cancelRegistration() {
         txtUsername.setEnabled(true);
@@ -145,7 +152,6 @@ public class MainFrame extends javax.swing.JFrame {
             // Just downloaded package, extract it
             if (file.getPath().endsWith(".package")) {
                 ExtractingDialog ed = new ExtractingDialog(this, false, file);
-                ed.setVisible(true);
             }
         }
 
@@ -239,6 +245,19 @@ public class MainFrame extends javax.swing.JFrame {
         } else {
             JOptionPane.showMessageDialog(this, "An error occured while changing password!", "Password change error", JOptionPane.ERROR_MESSAGE);
         }
+    }
+
+    public void parseProcessState(ProcessState s) {
+        int exitCode = s.exitCode;
+        
+        if (exitCode != 0 && !expectExit) {
+            JOptionPane.showMessageDialog(this, "Launched game process unexpectedly exited with code: " + exitCode
+                    , "Process died", JOptionPane.ERROR_MESSAGE);
+        }
+        
+        btnLaunch.setText("Launch");
+        this.process = null;
+        this.expectExit = false;
     }
 
     public enum LauncherState {
@@ -872,9 +891,21 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnChangePasswordActionPerformed
 
     private void btnLaunchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLaunchActionPerformed
+        if (this.process != null) {
+            this.expectExit = true;
+            
+            this.process.destroy();
+            
+            return;
+        }
+        
+        String osName = System.getProperty("os.name").toLowerCase();
+        boolean isLinux = osName .contains("linux") || osName.contains("unix");
+        
         String memValue = cbMemory.getSelectedItem().toString();
         String launchCommand = LaunchCommandBuilder.getLaunchCommand(this.loggedUsername, this.session, memValue);
-        
+        String gameDir = ConfigManager.getInstance().pathToJar;
+        //String jreDir = System.getProperty("java.home") + File.separatorChar + "bin" + File.separatorChar;
         if (this.syncState != SyncState.COMPLETE) {
             if (JOptionPane.showConfirmDialog(this, "Synchronization with server isn't done.\nAre you sure to launch unsynchronized client?", "Client not synchronized", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE)
                     == JOptionPane.CANCEL_OPTION) {
@@ -889,30 +920,68 @@ public class MainFrame extends javax.swing.JFrame {
             }
         }        
         
-        System.out.println(launchCommand);
+        // = *nix Workaround =
+        // Java for some reason won't setup current dir for subprocess correctly
+        // So there is workaround which creates temporary shell script and launch it
+        // This script changes current dir to gameDir and executes launch command
+        final String SCRIPT_NAME = "launch.sh";
         
-        Process process;
-        try {
-            process = new ProcessBuilder(launchCommand.split(" "))
-                    .directory(new File(ConfigManager.getInstance().pathToJar))
-                    .redirectErrorStream(true)
-                    .redirectOutput(Redirect.PIPE)
-                    .start();
+        if (isLinux) {
+            try {
+                String scriptPath = gameDir + File.separator + SCRIPT_NAME;
+                
+                // Create and write script file
+                Files.write(Paths.get(scriptPath), 
+                        (
+                            "#!/bin/sh\n" 
+                            + "cd \"" + gameDir + "\"\n" 
+                            + launchCommand
+                        ).getBytes("UTF-8"), 
+                        
+                        (new File(scriptPath).exists()) 
+                            ? StandardOpenOption.WRITE 
+                            : StandardOpenOption.CREATE_NEW);
+                
+                // Command for launch
+                launchCommand = "sh " + SCRIPT_NAME;
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+        
 
-            
+        // Create process and launch
+        Process proc;
+        try {
+                proc = new ProcessBuilder(launchCommand.split(" "))
+                        .directory(new File(gameDir))
+                        //.redirectErrorStream(true)
+                        .start();
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(this, "Unable to start process: " + ex.toString(), "Launch error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        
-        // Save memory value
-        ConfigManager.getInstance().getProperties().setProperty("memory", memValue);
-
-        StreamGobbler errorGobbler = new StreamGobbler(process.getErrorStream());
-        StreamGobbler outputGobbler = new StreamGobbler(process.getInputStream());
+                
+        // Intercept process' output
+        StreamGobbler errorGobbler = new StreamGobbler(proc.getErrorStream());
+        StreamGobbler outputGobbler = new StreamGobbler(proc.getInputStream());
         
         errorGobbler.start();
-        outputGobbler.start();        
+        outputGobbler.start();  
+        
+        // Save memory value
+        ConfigManager.getInstance().getProperties().setProperty("memory", memValue);        
+        
+        // Disabled for Linux, because if we kill launched process (shell script) we don't actually kill Minecraft process
+        if (!isLinux) {
+            this.process = proc;
+            this.expectExit = false;
+        
+            btnLaunch.setText("Kill");
+                
+            ProcessMonitorWorker pmw = new ProcessMonitorWorker(this, this.process);
+            pmw.execute();
+        }
     }//GEN-LAST:event_btnLaunchActionPerformed
 
     private void redirectSystemStreams() {
@@ -931,8 +1000,9 @@ public class MainFrame extends javax.swing.JFrame {
             public void write(byte[] b) throws IOException {
                 write(b, 0, b.length);
             }
+            
         };
-
+        
         System.setOut(new PrintStream(out, true));
         System.setErr(new PrintStream(out, true));
     }    
