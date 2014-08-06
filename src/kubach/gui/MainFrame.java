@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.lang.ProcessBuilder.Redirect;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
@@ -892,7 +893,13 @@ public class MainFrame extends javax.swing.JFrame {
         
         Process process;
         try {
-            process = new ProcessBuilder(launchCommand.split(" ")).directory(new File(ConfigManager.getInstance().pathToJar)).start();
+            process = new ProcessBuilder(launchCommand.split(" "))
+                    .directory(new File(ConfigManager.getInstance().pathToJar))
+                    .redirectErrorStream(true)
+                    .redirectOutput(Redirect.PIPE)
+                    .start();
+
+            
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(this, "Unable to start process: " + ex.toString(), "Launch error", JOptionPane.ERROR_MESSAGE);
             return;
