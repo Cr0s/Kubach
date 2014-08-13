@@ -1,7 +1,5 @@
 package kubach.gui;
 
-import javax.swing.DefaultListModel;
-import javax.swing.JList;
 import kubach.workers.WLCheckWorker;
 import kubach.workers.WLCheckWorker.WLCheckState;
 
