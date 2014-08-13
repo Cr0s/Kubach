@@ -69,7 +69,7 @@ public class MainFrame extends javax.swing.JFrame {
     private void startFileSync() {
         this.syncState = SyncState.STARTED;
 
-        RequestFilesListWorker rflw = new RequestFilesListWorker(this, ConfigManager.getInstance().getProperties().getProperty("clientprefix"));
+        RequestFilesListWorker rflw = new RequestFilesListWorker(this, ConfigManager.getInstance().getClientPrefix());
         rflw.execute();
     }
 
@@ -1049,6 +1049,10 @@ public class MainFrame extends javax.swing.JFrame {
             ConfigManager.getInstance().getProperties().setProperty("password", new String(txtPassword.getPassword()));
 
             ConfigManager.getInstance().saveProperties();
+            
+            WhiteListChecker wlc = new WhiteListChecker(this, true, this.loggedUsername, this.session, p.role.equals("admin"));
+            wlc.setVisible(true);
+            
         } else {
             System.out.println("Login error: " + p.reason);
 

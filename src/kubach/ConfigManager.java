@@ -79,6 +79,7 @@ public class ConfigManager {
         properties.setProperty("skinurl", "http://kubach.tk/getskin.php?user=%USERNAME%");
         properties.setProperty("skinuploadurl", "http://kubach.tk/uploadskin.php");
         properties.setProperty("skinremoveurl", "http://kubach.tk/removeskin.php");
+        properties.setProperty("nativecheckurl", "http://kubach.tk/NativeCheck.class");
         
         properties.setProperty("forgeversion", "1.6.4-Forge9.11.1.947");
         
@@ -98,5 +99,19 @@ public class ConfigManager {
 
     public Properties getProperties() {
         return this.properties;
+    }
+
+    public String getClientPrefix() {
+        String prefix = this.properties.getProperty("clientprefix");
+        
+        // Check OS
+        String osName = System.getProperty("os.name").toLowerCase();
+        boolean isLinux = osName.contains("linux") || osName.contains("unix");
+        
+        prefix += (isLinux) 
+                ? "_linux" 
+                : "_win";
+        
+        return prefix;
     }
 }

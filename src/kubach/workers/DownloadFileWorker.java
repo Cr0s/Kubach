@@ -11,6 +11,7 @@ import java.net.URL;
 import java.util.List;
 import javax.swing.SwingWorker;
 import kubach.ConfigManager;
+import kubach.Constants;
 import kubach.gui.MainFrame;
 import kubach.workers.DownloadFileWorker.SyncTaskState;
 
@@ -41,7 +42,7 @@ public class DownloadFileWorker extends SwingWorker<Void, SyncTaskState> {
         BufferedInputStream bis = null;
         ByteArrayOutputStream baos;
 
-        String prefix = ConfigManager.getInstance().getProperties().getProperty("clientprefix");
+        String prefix = ConfigManager.getInstance().getClientPrefix();
         String addr = ConfigManager.getInstance().getProperties().getProperty("updateurl");
         addr = addr.replace("%PREFIX%", prefix);
         addr = addr.replace("%FILE%", this.path);
@@ -49,7 +50,7 @@ public class DownloadFileWorker extends SwingWorker<Void, SyncTaskState> {
         try {
             URL url = new URL(addr);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestProperty("User-Agent", "User-Agent: Kubach v" + ConfigManager.getInstance().getProperties().getProperty("version"));
+            connection.setRequestProperty("User-Agent", "User-Agent: Kubach v" + Constants.VERSION);
 
             this.totalProgressValue = connection.getContentLength();
 

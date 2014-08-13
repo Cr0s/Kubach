@@ -80,6 +80,7 @@ public class UploadSkinWorker extends SwingWorker<Void, SkinUploadState> {
                     if (resString.equals("OK")) {
                         publish(new SkinUploadState(true));
                     } else {
+                        System.err.println("[Skin Upload Error] " + resString);
                         publish(new SkinUploadState(false));
                     }
                 }
