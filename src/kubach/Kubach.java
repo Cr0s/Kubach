@@ -1,5 +1,6 @@
 package kubach;
 
+import com.sun.jna.NativeLibrary;
 import kubach.gui.MainFrame;
 
 /**
@@ -12,6 +13,7 @@ public class Kubach {
      */
     public static void main(String[] args) {
         setLookAndFeel();
+        NativeLibrary.addSearchPath("Cr0s", ConfigManager.getInstance().pathToJar);
         
         MainFrame mf = new MainFrame();
         
@@ -20,10 +22,16 @@ public class Kubach {
     
     private static void setLookAndFeel() {
         try {
+            OUTER:
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Windows".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
+                //System.out.println(info.getName());
+                switch (info.getName()) {
+                    case "Windows":
+                        javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                        break OUTER;
+                    case "GTK+":
+                        javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                        break OUTER;
                 }
             }
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
