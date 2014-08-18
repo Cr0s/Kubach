@@ -1,5 +1,6 @@
 package kubach.gui;
 
+import kubach.workers.WLAddItemWorker;
 import kubach.workers.WLCheckWorker;
 import kubach.workers.WLCheckWorker.WLCheckState;
 
@@ -20,11 +21,10 @@ public class WhiteListChecker extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         
+        this.setVisible(false);
         this.isAdmin = admin;
         
-        if (admin) {
-            adminPopup.setEnabled(true);
-        }
+        btnAdd.setVisible(this.isAdmin);
         
         this.username = username;
         this.session = session;
@@ -54,6 +54,7 @@ public class WhiteListChecker extends javax.swing.JDialog {
         jPanel3 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        btnAdd = new javax.swing.JButton();
 
         adminPopup.setEnabled(false);
         adminPopup.setLabel("popupAdmin");
@@ -135,12 +136,21 @@ public class WhiteListChecker extends javax.swing.JDialog {
             }
         });
 
+        btnAdd.setText("Add selected");
+        btnAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap()
+                .addComponent(btnAdd)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -152,7 +162,8 @@ public class WhiteListChecker extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
-                    .addComponent(jButton2))
+                    .addComponent(jButton2)
+                    .addComponent(btnAdd))
                 .addContainerGap(18, Short.MAX_VALUE))
         );
 
@@ -191,13 +202,7 @@ public class WhiteListChecker extends javax.swing.JDialog {
     }//GEN-LAST:event_adminPopupActionPerformed
 
     private void addItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addItemActionPerformed
-        String item = (String) lbFiles.getSelectedValue();
-        
-        if (item == null) {
-            return;
-        }
-        
-        
+
     }//GEN-LAST:event_addItemActionPerformed
 
     private void lbFilesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbFilesMouseClicked
@@ -207,10 +212,22 @@ public class WhiteListChecker extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_lbFilesMouseClicked
 
+    private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
+        String item = (String) lbFiles.getSelectedValue();
+        
+        if (item == null) {
+            return;
+        }
+        
+        WLAddItemWorker w = new WLAddItemWorker(this, this.username, this.session, item);
+        w.execute();
+    }//GEN-LAST:event_btnAddActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private java.awt.MenuItem addItem;
     private java.awt.PopupMenu adminPopup;
+    private javax.swing.JButton btnAdd;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
@@ -225,9 +242,9 @@ public class WhiteListChecker extends javax.swing.JDialog {
         if (state.p.numFiles == 0) {
             this.checkResult = true;
             
-            this.setVisible(false);
+            //this.setVisible(false);
         } else {
-            this.setVisible(true);
+            //this.setVisible(true);
             this.checkResult = false;
             
             lbFiles.setListData(state.p.files);

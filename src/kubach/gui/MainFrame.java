@@ -83,9 +83,6 @@ public class MainFrame extends javax.swing.JFrame {
             model.removeRow(i);
         }
 
-
-        this.syncState = SyncState.STARTED;
-
         boolean needToBeSync = false;
 
         for (String s : p.files) {
@@ -151,6 +148,10 @@ public class MainFrame extends javax.swing.JFrame {
             if (file.getPath().endsWith(".package")) {
                 ExtractingDialog ed = new ExtractingDialog(this, false, file);
                 ed.setVisible(true);
+            }
+            
+            if (file.getName().equals("changelog.txt")) {
+                refreshLogoAndChangelog();
             }
         }
 
@@ -316,6 +317,7 @@ public class MainFrame extends javax.swing.JFrame {
         tabSync = new javax.swing.JPanel();
         panSync = new javax.swing.JPanel();
         pbSync = new javax.swing.JProgressBar();
+        btnRestartSync = new javax.swing.JButton();
         spTblSync = new javax.swing.JScrollPane();
         tblSync = new javax.swing.JTable();
         tabLog = new javax.swing.JPanel();
@@ -328,6 +330,7 @@ public class MainFrame extends javax.swing.JFrame {
         lbChatDates = new javax.swing.JList();
         scChatLog = new javax.swing.JScrollPane();
         txtChatLog = new javax.swing.JTextArea();
+        btnRefresh = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         grbSkin = new javax.swing.JPanel();
         panSkin = new javax.swing.JPanel();
@@ -411,17 +414,17 @@ public class MainFrame extends javax.swing.JFrame {
             .addGroup(grbLoginLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(grbLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtPassword)
-                    .addComponent(txtUsername)
+                    .addComponent(txtPassword, javax.swing.GroupLayout.DEFAULT_SIZE, 249, Short.MAX_VALUE)
+                    .addComponent(txtUsername, javax.swing.GroupLayout.DEFAULT_SIZE, 249, Short.MAX_VALUE)
                     .addGroup(grbLoginLayout.createSequentialGroup()
                         .addComponent(btnLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
                         .addComponent(btnRegister, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(grbLoginLayout.createSequentialGroup()
                         .addGroup(grbLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblUsername)
                             .addComponent(lblPassword))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 174, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         grbLoginLayout.setVerticalGroup(
@@ -444,7 +447,7 @@ public class MainFrame extends javax.swing.JFrame {
         panBg.setLayout(panBgLayout);
         panBgLayout.setHorizontalGroup(
             panBgLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 600, Short.MAX_VALUE)
+            .addGap(0, 644, Short.MAX_VALUE)
         );
         panBgLayout.setVerticalGroup(
             panBgLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -468,6 +471,13 @@ public class MainFrame extends javax.swing.JFrame {
 
         pbSync.setStringPainted(true);
 
+        btnRestartSync.setText("Restart");
+        btnRestartSync.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRestartSyncActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout panSyncLayout = new javax.swing.GroupLayout(panSync);
         panSync.setLayout(panSyncLayout);
         panSyncLayout.setHorizontalGroup(
@@ -475,13 +485,17 @@ public class MainFrame extends javax.swing.JFrame {
             .addGroup(panSyncLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(pbSync, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnRestartSync)
                 .addContainerGap())
         );
         panSyncLayout.setVerticalGroup(
             panSyncLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panSyncLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(pbSync, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(panSyncLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(pbSync, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnRestartSync))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -535,14 +549,14 @@ public class MainFrame extends javax.swing.JFrame {
         tabSyncLayout.setHorizontalGroup(
             tabSyncLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(panSync, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(spTblSync, javax.swing.GroupLayout.DEFAULT_SIZE, 600, Short.MAX_VALUE)
+            .addComponent(spTblSync, javax.swing.GroupLayout.DEFAULT_SIZE, 644, Short.MAX_VALUE)
         );
         tabSyncLayout.setVerticalGroup(
             tabSyncLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(tabSyncLayout.createSequentialGroup()
                 .addComponent(panSync, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(spTblSync, javax.swing.GroupLayout.DEFAULT_SIZE, 424, Short.MAX_VALUE))
+                .addComponent(spTblSync, javax.swing.GroupLayout.DEFAULT_SIZE, 422, Short.MAX_VALUE))
         );
 
         tabs.addTab("File sync", tabSync);
@@ -560,7 +574,7 @@ public class MainFrame extends javax.swing.JFrame {
         tabOutLog.setLayout(tabOutLogLayout);
         tabOutLogLayout.setHorizontalGroup(
             tabOutLogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(spLog, javax.swing.GroupLayout.DEFAULT_SIZE, 595, Short.MAX_VALUE)
+            .addComponent(spLog, javax.swing.GroupLayout.DEFAULT_SIZE, 639, Short.MAX_VALUE)
         );
         tabOutLogLayout.setVerticalGroup(
             tabOutLogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -577,19 +591,32 @@ public class MainFrame extends javax.swing.JFrame {
         txtChatLog.setRows(5);
         scChatLog.setViewportView(txtChatLog);
 
+        btnRefresh.setText("Refresh");
+        btnRefresh.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRefreshActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout tabChatLogLayout = new javax.swing.GroupLayout(tabChatLog);
         tabChatLog.setLayout(tabChatLogLayout);
         tabChatLogLayout.setHorizontalGroup(
             tabChatLogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(tabChatLogLayout.createSequentialGroup()
-                .addComponent(scChatDates, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(tabChatLogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(scChatDates, javax.swing.GroupLayout.DEFAULT_SIZE, 98, Short.MAX_VALUE)
+                    .addComponent(btnRefresh, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(scChatLog, javax.swing.GroupLayout.DEFAULT_SIZE, 491, Short.MAX_VALUE))
+                .addComponent(scChatLog, javax.swing.GroupLayout.DEFAULT_SIZE, 535, Short.MAX_VALUE))
         );
         tabChatLogLayout.setVerticalGroup(
             tabChatLogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(scChatDates, javax.swing.GroupLayout.DEFAULT_SIZE, 452, Short.MAX_VALUE)
-            .addComponent(scChatLog)
+            .addComponent(scChatLog, javax.swing.GroupLayout.DEFAULT_SIZE, 452, Short.MAX_VALUE)
+            .addGroup(tabChatLogLayout.createSequentialGroup()
+                .addComponent(scChatDates, javax.swing.GroupLayout.PREFERRED_SIZE, 421, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnRefresh)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         logTabs.addTab("Chat log", tabChatLog);
@@ -676,12 +703,12 @@ public class MainFrame extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGap(0, 221, Short.MAX_VALUE)
                         .addComponent(btnChangePassword))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel1)
-                        .addGap(0, 179, Short.MAX_VALUE))
-                    .addComponent(txtNewPassword))
+                        .addGap(0, 223, Short.MAX_VALUE))
+                    .addComponent(txtNewPassword, javax.swing.GroupLayout.DEFAULT_SIZE, 287, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -747,14 +774,14 @@ public class MainFrame extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnLaunch, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnLaunch, javax.swing.GroupLayout.DEFAULT_SIZE, 249, Short.MAX_VALUE)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(lblMemory)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(cbMemory, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGap(0, 90, Short.MAX_VALUE)
                         .addComponent(jButton2)))
                 .addContainerGap())
         );
@@ -799,6 +826,8 @@ public class MainFrame extends javax.swing.JFrame {
 
         txtUsername.setText(ConfigManager.getInstance().getProperties().getProperty("username"));
         txtPassword.setText(ConfigManager.getInstance().getProperties().getProperty("password"));
+        
+        cbMemory.setSelectedItem(ConfigManager.getInstance().getProperties().getProperty("memory"));
     }//GEN-LAST:event_formWindowOpened
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
@@ -970,6 +999,7 @@ public class MainFrame extends javax.swing.JFrame {
         
         // Save memory value
         ConfigManager.getInstance().getProperties().setProperty("memory", memValue);        
+        ConfigManager.getInstance().saveProperties();
         
         // Disabled for Linux, because if we kill launched process (shell script) we don't actually kill Minecraft process
         if (!isLinux) {
@@ -1027,6 +1057,18 @@ public class MainFrame extends javax.swing.JFrame {
         lcd.setVisible(true);
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    private void btnRestartSyncActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRestartSyncActionPerformed
+        startFileSync();
+    }//GEN-LAST:event_btnRestartSyncActionPerformed
+
+    private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
+        refreshChatLogs();
+    }//GEN-LAST:event_btnRefreshActionPerformed
+
+    private void refreshChatLogs() {
+        
+    }
+    
     public void showLoginResult(PacketLoginResponse p) {
         btnLogin.setEnabled(true);
 
@@ -1051,7 +1093,7 @@ public class MainFrame extends javax.swing.JFrame {
             ConfigManager.getInstance().saveProperties();
             
             WhiteListChecker wlc = new WhiteListChecker(this, true, this.loggedUsername, this.session, p.role.equals("admin"));
-            wlc.setVisible(true);
+            //wlc.setVisible(true);
             
         } else {
             System.out.println("Login error: " + p.reason);
@@ -1089,8 +1131,10 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JButton btnChangePassword;
     private javax.swing.JButton btnLaunch;
     private javax.swing.JButton btnLogin;
+    private javax.swing.JButton btnRefresh;
     private javax.swing.JButton btnRegister;
     private javax.swing.JButton btnRemoveSkin;
+    private javax.swing.JButton btnRestartSync;
     private javax.swing.JButton btnUploadSkin;
     private javax.swing.JComboBox cbMemory;
     private javax.swing.JFileChooser fcSkin;

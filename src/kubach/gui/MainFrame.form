@@ -216,7 +216,7 @@
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="panSync" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="spTblSync" pref="424" max="32767" attributes="0"/>
+                      <Component id="spTblSync" pref="422" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -236,7 +236,9 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="pbSync" pref="616" max="32767" attributes="0"/>
+                          <Component id="pbSync" max="32767" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="btnRestartSync" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
                   </Group>
@@ -245,7 +247,10 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="pbSync" min="-2" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="pbSync" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="btnRestartSync" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
                           <EmptySpace max="32767" attributes="0"/>
                       </Group>
                   </Group>
@@ -256,6 +261,14 @@
                   <Properties>
                     <Property name="stringPainted" type="boolean" value="true"/>
                   </Properties>
+                </Component>
+                <Component class="javax.swing.JButton" name="btnRestartSync">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Restart"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnRestartSyncActionPerformed"/>
+                  </Events>
                 </Component>
               </SubComponents>
             </Container>
@@ -391,7 +404,10 @@
                     <DimensionLayout dim="0">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="0" attributes="0">
-                              <Component id="scChatDates" min="-2" pref="98" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                  <Component id="scChatDates" pref="98" max="32767" attributes="0"/>
+                                  <Component id="btnRefresh" max="32767" attributes="0"/>
+                              </Group>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="scChatLog" pref="535" max="32767" attributes="0"/>
                           </Group>
@@ -399,8 +415,13 @@
                     </DimensionLayout>
                     <DimensionLayout dim="1">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="scChatDates" pref="452" max="32767" attributes="0"/>
-                          <Component id="scChatLog" alignment="0" pref="426" max="32767" attributes="0"/>
+                          <Component id="scChatLog" pref="452" max="32767" attributes="0"/>
+                          <Group type="102" attributes="0">
+                              <Component id="scChatDates" min="-2" pref="421" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="btnRefresh" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                          </Group>
                       </Group>
                     </DimensionLayout>
                   </Layout>
@@ -440,6 +461,14 @@
                         </Component>
                       </SubComponents>
                     </Container>
+                    <Component class="javax.swing.JButton" name="btnRefresh">
+                      <Properties>
+                        <Property name="text" type="java.lang.String" value="Refresh"/>
+                      </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnRefreshActionPerformed"/>
+                      </Events>
+                    </Component>
                   </SubComponents>
                 </Container>
               </SubComponents>

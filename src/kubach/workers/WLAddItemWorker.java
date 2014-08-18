@@ -1,6 +1,8 @@
 package kubach.workers;
 
 import com.esotericsoftware.kryonet.Client;
+import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.kryonet.Listener;
 import javax.swing.SwingWorker;
 import kubach.ConfigManager;
 import kubach.Constants;
@@ -36,6 +38,7 @@ public class WLAddItemWorker extends SwingWorker<Void, Void> {
         
         this.username = username;
         this.session = session;
+        this.item = item;
         
         System.setSecurityManager(null);
     }
@@ -64,6 +67,13 @@ public class WLAddItemWorker extends SwingWorker<Void, Void> {
 
         client.start();
 
+        client.addListener(new Listener() { 
+            @Override
+            public void received(Connection connection, Object object) {
+                connection.close();
+            }            
+        });
+        
         try {
             client.connect(5000, Constants.SERVER_HOST, Constants.SERVER_PORT);
         } catch (Exception e) {
@@ -80,10 +90,6 @@ public class WLAddItemWorker extends SwingWorker<Void, Void> {
         
         client.sendTCP(packet);
 
-        while (client.isConnected()) {
-            Thread.sleep(100);
-        }
-        
         return null;
     }
     
