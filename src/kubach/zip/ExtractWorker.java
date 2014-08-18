@@ -12,6 +12,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
+import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 import kubach.ConfigManager;
 import kubach.zip.ExtractWorker.ExtractState;
@@ -38,7 +39,7 @@ public class ExtractWorker extends SwingWorker<Void, ExtractState> {
                 System.out.println("[Package] Total files: " + this.totalFiles);
             }
         } catch (ZipException ex) {
-            Logger.getLogger(ExtractWorker.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(ed, "Failed to extract: " + ex.toString(), "Extracting fail", JOptionPane.ERROR_MESSAGE);
         } catch (IOException ex) {
             Logger.getLogger(ExtractWorker.class.getName()).log(Level.SEVERE, null, ex);
         }

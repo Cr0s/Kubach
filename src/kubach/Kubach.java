@@ -1,6 +1,6 @@
 package kubach;
 
-import com.sun.jna.NativeLibrary;
+import kubach.gui.FirstLaunch;
 import kubach.gui.MainFrame;
 
 /**
@@ -13,11 +13,15 @@ public class Kubach {
      */
     public static void main(String[] args) {
         setLookAndFeel();
-        NativeLibrary.addSearchPath("Cr0s", ConfigManager.getInstance().pathToJar);
         
-        MainFrame mf = new MainFrame();
-        
-        mf.setVisible(true);
+        // It seems we have not a first launch
+        if (!ConfigManager.getInstance().getProperties().getProperty("virgin").equals("true")) {
+            MainFrame mf = new MainFrame();
+            mf.setVisible(true);
+        } else { // Prepare to lost our virginity
+            FirstLaunch fl = new FirstLaunch();
+            fl.setVisible(true);
+        }
     }
     
     private static void setLookAndFeel() {

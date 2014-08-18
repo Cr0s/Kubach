@@ -1,5 +1,6 @@
 package kubach.zip;
 
+import java.awt.event.ActionListener;
 import java.io.File;
 import kubach.zip.ExtractWorker.ExtractState;
 
@@ -10,7 +11,13 @@ import kubach.zip.ExtractWorker.ExtractState;
 public class ExtractingDialog extends javax.swing.JDialog {
 
     private File pack;
+    private ActionListener doneCallback;
     
+    public ExtractingDialog(java.awt.Frame parent, boolean modal, File pack, ActionListener doneCallback) {
+        this(parent, modal, pack);
+        
+        this.doneCallback = doneCallback;
+    }
     /**
      * Creates new form ExtractingDialog
      */
@@ -99,6 +106,11 @@ public class ExtractingDialog extends javax.swing.JDialog {
         this.pbProgress.setString(String.format("%.2f", es.filesDone / (float) es.totalNumFiles * 100) + "%");
         
         if (es.filesDone == es.totalNumFiles) {
+            // Inform callback
+            if (this.doneCallback != null) {
+                this.doneCallback.actionPerformed(null);
+            }
+            
             this.setVisible(false);
             this.dispose();
         }

@@ -10,27 +10,29 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
 import javax.swing.SwingWorker;
+import kubach.ConfigManager;
 import kubach.Constants;
-import kubach.gui.FirstLaunch;
-import kubach.workers.DownloadFileWorker.SyncTaskState;
+import kubach.gui.MainFrame;
+import kubach.workers.DownloadFileSyncWorker.SyncTaskState;
 
 /**
  * Worker for file downloading
  *
  * @author Cr0s
  */
-public class DownloadFileWorker extends SwingWorker<Void, SyncTaskState> {
+public class DownloadFileSyncWorker extends SwingWorker<Void, SyncTaskState> {
 
-    private FirstLaunch f;
-    private String pathToFile;
+    private MainFrame nbf;
+    private String path, pathToFile;
     private int totalProgressValue;
+    private int tableRowIndex;
     private int numTries = 5;
-    private String addr;
-    
-    public DownloadFileWorker(FirstLaunch f, String addr, String pathToFile) {
-        this.f = f;
+
+    public DownloadFileSyncWorker(MainFrame nbf, String pathToFile, String path, int tableRowIndex) {
+        this.nbf = nbf;
         this.pathToFile = pathToFile;
-        this.addr = addr;
+        this.path = path;
+        this.tableRowIndex = tableRowIndex;
     }
 
     @Override
@@ -39,6 +41,11 @@ public class DownloadFileWorker extends SwingWorker<Void, SyncTaskState> {
 
         BufferedInputStream bis = null;
         ByteArrayOutputStream baos;
+
+        String prefix = ConfigManager.getInstance().getClientPrefix();
+        String addr = ConfigManager.getInstance().getProperties().getProperty("updateurl");
+        addr = addr.replace("%PREFIX%", prefix);
+        addr = addr.replace("%FILE%", this.path);
 
         try {
             URL url = new URL(addr);
@@ -62,10 +69,10 @@ public class DownloadFileWorker extends SwingWorker<Void, SyncTaskState> {
                 }
 
                 // Write file to disk
-                File file = new File(this.pathToFile);
-                writeBytesToFile(file, baos.toByteArray());
+                File f = new File(this.pathToFile);
+                writeBytesToFile(f, baos.toByteArray());
 
-                publish(new SyncTaskState(addr, "Finished", this.totalProgressValue, file));
+                publish(new SyncTaskState(addr, "Finished", this.totalProgressValue, f));
             }
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -97,7 +104,7 @@ public class DownloadFileWorker extends SwingWorker<Void, SyncTaskState> {
     @Override
     protected void process(List<SyncTaskState> chunks) {
         for (SyncTaskState sts : chunks) {
-            f.setDownloadProgress(sts.status, sts.progressValue, this.totalProgressValue, sts.file);
+            nbf.setSyncTableRow(this.tableRowIndex, sts.status, sts.progressValue, this.totalProgressValue, sts.file);
         }
     }
 

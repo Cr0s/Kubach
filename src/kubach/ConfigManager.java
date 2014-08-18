@@ -86,6 +86,9 @@ public class ConfigManager {
         
         properties.setProperty("forgeversion", "1.6.4-Forge9.11.1.947");
         
+        properties.setProperty("virgin", "true");
+        properties.setProperty("virgincondoms", "http://kubach.tk/update/condoms.package");
+        
         properties.store(propertiesOut, null);
     }
 

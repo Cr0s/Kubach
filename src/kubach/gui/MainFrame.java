@@ -1,5 +1,6 @@
 package kubach.gui;
 
+import com.sun.jna.NativeLibrary;
 import java.awt.Component;
 import java.awt.Insets;
 import java.io.BufferedReader;
@@ -32,7 +33,7 @@ import kubach.util.LaunchCommandBuilder;
 import kubach.util.Md5Checksum;
 import kubach.workers.AuthWorker;
 import kubach.workers.ChangePasswordWorker;
-import kubach.workers.DownloadFileWorker;
+import kubach.workers.DownloadFileSyncWorker;
 import kubach.workers.LoadCaptchaWorker;
 import kubach.workers.ProcessMonitorWorker;
 import kubach.workers.ProcessMonitorWorker.ProcessState;
@@ -71,6 +72,8 @@ public class MainFrame extends javax.swing.JFrame {
     private void startFileSync() {
         this.syncState = SyncState.STARTED;
 
+        this.numFilesSynced = 0;
+        
         RequestFilesListWorker rflw = new RequestFilesListWorker(this, ConfigManager.getInstance().getClientPrefix());
         rflw.execute();
     }
@@ -107,7 +110,7 @@ public class MainFrame extends javax.swing.JFrame {
 
                 // Create worker to download
                 ((DefaultTableModel) tblSync.getModel()).addRow(new Object[]{args[0], "-", new JProgressBar()});
-                DownloadFileWorker wsi = new DownloadFileWorker(this, f.getPath(), args[0], tblSync.getModel().getRowCount() - 1);
+                DownloadFileSyncWorker wsi = new DownloadFileSyncWorker(this, f.getPath(), args[0], tblSync.getModel().getRowCount() - 1);
                 wsi.execute();
             }
         }
@@ -285,6 +288,8 @@ public class MainFrame extends javax.swing.JFrame {
     public MainFrame() {
         initComponents();
 
+        NativeLibrary.addSearchPath("Cr0s", ConfigManager.getInstance().pathToJar);        
+        
         LogoPanel lp = new LogoPanel(panBg);
         panBg.add(lp);
 
@@ -1045,7 +1050,7 @@ public class MainFrame extends javax.swing.JFrame {
             @Override
             public void run() {
                 if (text.contains("[CHAT]")) { // this is chat message, append it to chat log
-                    appendChatLog(text);
+                    appendChatLog(text.replace("[INFO] [Minecraft-Client] [CHAT]", ""));
                 } 
                 
                 txtLog.append(text);
@@ -1065,11 +1070,16 @@ public class MainFrame extends javax.swing.JFrame {
             text += "\n";
             
             // Append data to file. If file doesn't exists, create new
-            Files.write(Paths.get(logPath),
-                    text.getBytes("UTF-8"),
-                    (new File(logPath).exists())
-                    ? StandardOpenOption.APPEND
-                    : StandardOpenOption.CREATE_NEW);
+            File logFile = new File(logPath);
+            if (!logFile.exists()) {
+                new File(new File(logPath).getParent()).mkdirs();
+                
+                if (!logFile.createNewFile()){
+                    return;
+                }
+            }
+
+            Files.write(Paths.get(logPath), text.getBytes("UTF-8"),StandardOpenOption.APPEND);
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -1088,6 +1098,16 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void btnRestartSyncActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRestartSyncActionPerformed
+        // Make sure we ended current synch process
+        // If not, ask user what to do with current synch process
+        if (this.syncState != SyncState.COMPLETE) {
+            if (JOptionPane.showConfirmDialog(this, "Synchronization with server isn't done.\nAre you sure to restart current synch process?", "Synchronization isn't complete yet", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE)
+                    == JOptionPane.CANCEL_OPTION) {
+                return;
+            }
+        }
+        
+        // Restart
         startFileSync();
     }//GEN-LAST:event_btnRestartSyncActionPerformed
 
@@ -1103,6 +1123,7 @@ public class MainFrame extends javax.swing.JFrame {
             
             String selectedName = (String) lbChatDates.getSelectedValue();
             String logPath = ConfigManager.getInstance().chatlogsDir + File.separatorChar + selectedName;
+            
             try {
                 txtChatLog.setText(new String(Files.readAllBytes(Paths.get(logPath)), "UTF-8"));
             } catch (IOException ex) {
