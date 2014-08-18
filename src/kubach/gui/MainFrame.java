@@ -12,6 +12,8 @@ import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
@@ -109,7 +111,7 @@ public class MainFrame extends javax.swing.JFrame {
                 wsi.execute();
             }
         }
-        
+
         if (!needToBeSync) {
             this.syncState = SyncState.COMPLETE;
         }
@@ -143,13 +145,13 @@ public class MainFrame extends javax.swing.JFrame {
         // TODO: determine its thread-safe or not
         if (status.equals("Finished")) {
             this.numFilesSynced++;
-            
+
             // Just downloaded package, extract it
             if (file.getPath().endsWith(".package")) {
                 ExtractingDialog ed = new ExtractingDialog(this, false, file);
                 ed.setVisible(true);
             }
-            
+
             if (file.getName().equals("changelog.txt")) {
                 refreshLogoAndChangelog();
             }
@@ -215,9 +217,9 @@ public class MainFrame extends javax.swing.JFrame {
             }
         }
 
-        panSkin.removeAll();        
+        panSkin.removeAll();
     }
-    
+
     public void updateSkinRemoveState(boolean success) {
         removeSkinPanel();
         setSkinPanel();
@@ -233,12 +235,12 @@ public class MainFrame extends javax.swing.JFrame {
 
     public void parsePasswordChangeResult(boolean success) {
         String newPass = new String(txtNewPassword.getPassword());
-        
+
         txtNewPassword.setText("");
         txtNewPassword.setEnabled(true);
         btnChangePassword.setEnabled(true);
         btnChangePassword.setText("Change");
-        
+
         if (success) {
             txtPassword.setText(newPass);
             ConfigManager.getInstance().getProperties().setProperty("password", newPass);
@@ -249,12 +251,11 @@ public class MainFrame extends javax.swing.JFrame {
 
     public void parseProcessState(ProcessState s) {
         int exitCode = s.exitCode;
-        
+
         if (exitCode != 0 && !expectExit) {
-            JOptionPane.showMessageDialog(this, "Launched game process unexpectedly exited with code: " + exitCode
-                    , "Process died", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Launched game process unexpectedly exited with code: " + exitCode, "Process died", JOptionPane.ERROR_MESSAGE);
         }
-        
+
         btnLaunch.setText("Launch");
         this.process = null;
         this.expectExit = false;
@@ -290,7 +291,7 @@ public class MainFrame extends javax.swing.JFrame {
         startFileSync();
 
         fcSkin.addChoosableFileFilter(new FileNameExtensionFilter("PNG files", "png"));
-        
+
         this.redirectSystemStreams();
     }
 
@@ -583,7 +584,14 @@ public class MainFrame extends javax.swing.JFrame {
 
         logTabs.addTab("Output", tabOutLog);
 
+        lbChatDates.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lbChatDatesMouseClicked(evt);
+            }
+        });
         scChatDates.setViewportView(lbChatDates);
+
+        scChatLog.setAutoscrolls(true);
 
         txtChatLog.setEditable(false);
         txtChatLog.setColumns(20);
@@ -826,7 +834,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         txtUsername.setText(ConfigManager.getInstance().getProperties().getProperty("username"));
         txtPassword.setText(ConfigManager.getInstance().getProperties().getProperty("password"));
-        
+
         cbMemory.setSelectedItem(ConfigManager.getInstance().getProperties().getProperty("memory"));
     }//GEN-LAST:event_formWindowOpened
 
@@ -843,7 +851,7 @@ public class MainFrame extends javax.swing.JFrame {
             this.cancelRegistration(); // this enables back text fields and buttons
 
             removeSkinPanel();
-            
+
             txtNewPassword.setText("");
         }
     }//GEN-LAST:event_btnLoginActionPerformed
@@ -911,7 +919,7 @@ public class MainFrame extends javax.swing.JFrame {
         if (txtNewPassword.getPassword().length > 0) {
             ChangePasswordWorker cpw = new ChangePasswordWorker(this, this.loggedUsername, this.session, new String(txtNewPassword.getPassword()));
             cpw.execute();
-            
+
             txtPassword.setEnabled(false);
             btnChangePassword.setEnabled(false);
             btnChangePassword.setText("Changing...");
@@ -921,15 +929,15 @@ public class MainFrame extends javax.swing.JFrame {
     private void btnLaunchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLaunchActionPerformed
         if (this.process != null) {
             this.expectExit = true;
-            
+
             this.process.destroy();
-            
+
             return;
         }
-        
+
         String osName = System.getProperty("os.name").toLowerCase();
-        boolean isLinux = osName .contains("linux") || osName.contains("unix");
-        
+        boolean isLinux = osName.contains("linux") || osName.contains("unix");
+
         String memValue = cbMemory.getSelectedItem().toString();
         String launchCommand = LaunchCommandBuilder.getLaunchCommand(this.loggedUsername, this.session, memValue);
         String gameDir = ConfigManager.getInstance().pathToJar;
@@ -946,68 +954,65 @@ public class MainFrame extends javax.swing.JFrame {
                     == JOptionPane.CANCEL_OPTION) {
                 return;
             }
-        }        
-        
+        }
+
         // = *nix Workaround =
         // Java for some reason won't setup current dir for subprocess correctly
         // So there is workaround which creates temporary shell script and launch it
         // This script changes current dir to gameDir and executes launch command
         final String SCRIPT_NAME = "launch.sh";
-        
+
         if (isLinux) {
             try {
                 String scriptPath = gameDir + File.separator + SCRIPT_NAME;
-                
+
                 // Create and write script file
-                Files.write(Paths.get(scriptPath), 
-                        (
-                            "#!/bin/sh\n" 
-                            + "cd \"" + gameDir + "\"\n" 
-                            + launchCommand
-                        ).getBytes("UTF-8"), 
-                        
-                        (new File(scriptPath).exists()) 
-                            ? StandardOpenOption.WRITE 
-                            : StandardOpenOption.CREATE_NEW);
-                
+                Files.write(Paths.get(scriptPath),
+                        ("#!/bin/sh\n"
+                        + "cd \"" + gameDir + "\"\n"
+                        + launchCommand).getBytes("UTF-8"),
+                        (new File(scriptPath).exists())
+                        ? StandardOpenOption.WRITE
+                        : StandardOpenOption.CREATE_NEW);
+
                 // Command for launch
                 launchCommand = "sh " + SCRIPT_NAME;
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
         }
-        
+
 
         // Create process and launch
         Process proc;
         try {
-                proc = new ProcessBuilder(launchCommand.split(" "))
-                        .directory(new File(gameDir))
-                        //.redirectErrorStream(true)
-                        .start();
+            proc = new ProcessBuilder(launchCommand.split(" "))
+                    .directory(new File(gameDir))
+                    //.redirectErrorStream(true)
+                    .start();
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(this, "Unable to start process: " + ex.toString(), "Launch error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-                
+
         // Intercept process' output
         StreamGobbler errorGobbler = new StreamGobbler(proc.getErrorStream());
         StreamGobbler outputGobbler = new StreamGobbler(proc.getInputStream());
-        
+
         errorGobbler.start();
-        outputGobbler.start();  
-        
+        outputGobbler.start();
+
         // Save memory value
-        ConfigManager.getInstance().getProperties().setProperty("memory", memValue);        
+        ConfigManager.getInstance().getProperties().setProperty("memory", memValue);
         ConfigManager.getInstance().saveProperties();
-        
+
         // Disabled for Linux, because if we kill launched process (shell script) we don't actually kill Minecraft process
         if (!isLinux) {
             this.process = proc;
             this.expectExit = false;
-        
+
             btnLaunch.setText("Kill");
-                
+
             ProcessMonitorWorker pmw = new ProcessMonitorWorker(this, this.process);
             pmw.execute();
         }
@@ -1017,34 +1022,59 @@ public class MainFrame extends javax.swing.JFrame {
         OutputStream out = new OutputStream() {
             @Override
             public void write(int b) throws IOException {
-                updateLogArea(String.valueOf((char) b));
+                appendToLogs(String.valueOf((char) b));
             }
 
             @Override
             public void write(byte[] b, int off, int len) throws IOException {
-                updateLogArea(new String(b, off, len));
+                appendToLogs(new String(b, off, len));
             }
 
             @Override
             public void write(byte[] b) throws IOException {
                 write(b, 0, b.length);
             }
-            
         };
-        
+
         System.setOut(new PrintStream(out, true));
         System.setErr(new PrintStream(out, true));
-    }    
-    
-    private void updateLogArea(final String text) {
+    }
+
+    private void appendToLogs(final String text) {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
+                if (text.contains("[CHAT]")) { // this is chat message, append it to chat log
+                    appendChatLog(text);
+                } 
+                
                 txtLog.append(text);
             }
         });
-    }    
-    
+    }
+
+    private void appendChatLog(String text) {
+        try {
+            SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd");
+            String logName = dt.format(new Date());
+            
+            // Path format: gameDir/chatlogs/yyyy-mm-dd.log
+            String logPath = ConfigManager.getInstance().chatlogsDir + File.separatorChar + logName + ".log";
+
+            // Append text with line ending
+            text += "\n";
+            
+            // Append data to file. If file doesn't exists, create new
+            Files.write(Paths.get(logPath),
+                    text.getBytes("UTF-8"),
+                    (new File(logPath).exists())
+                    ? StandardOpenOption.APPEND
+                    : StandardOpenOption.CREATE_NEW);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
         ConfigManager.getInstance().saveProperties();
     }//GEN-LAST:event_formWindowClosed
@@ -1052,7 +1082,7 @@ public class MainFrame extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         String memValue = cbMemory.getSelectedItem().toString();
         String launchCommand = LaunchCommandBuilder.getLaunchCommand(this.loggedUsername, this.session, memValue);
-        
+
         LaunchCommandDialog lcd = new LaunchCommandDialog(this, true, launchCommand);
         lcd.setVisible(true);
     }//GEN-LAST:event_jButton2ActionPerformed
@@ -1065,10 +1095,41 @@ public class MainFrame extends javax.swing.JFrame {
         refreshChatLogs();
     }//GEN-LAST:event_btnRefreshActionPerformed
 
+    private void lbChatDatesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lbChatDatesMouseClicked
+        if (evt.getClickCount() == 2) { // doubleclick
+            if (lbChatDates.getSelectedIndex() == -1) { // there is no selection
+                return;
+            }
+            
+            String selectedName = (String) lbChatDates.getSelectedValue();
+            String logPath = ConfigManager.getInstance().chatlogsDir + File.separatorChar + selectedName;
+            try {
+                txtChatLog.setText(new String(Files.readAllBytes(Paths.get(logPath)), "UTF-8"));
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }//GEN-LAST:event_lbChatDatesMouseClicked
+
     private void refreshChatLogs() {
-        
+        File dir = new File(ConfigManager.getInstance().chatlogsDir);
+        if (!dir.exists()) {
+            dir.mkdir();
+        }
+
+        File[] logs = dir.listFiles();
+        if (logs.length == 0) {
+            return;
+        }
+
+        String[] names = new String[logs.length];
+        for (int i = 0; i < logs.length; i++) {
+            names[i] = logs[i].getName();
+        }
+
+        lbChatDates.setListData(names);
     }
-    
+
     public void showLoginResult(PacketLoginResponse p) {
         btnLogin.setEnabled(true);
 
@@ -1091,20 +1152,20 @@ public class MainFrame extends javax.swing.JFrame {
             ConfigManager.getInstance().getProperties().setProperty("password", new String(txtPassword.getPassword()));
 
             ConfigManager.getInstance().saveProperties();
-            
+
             WhiteListChecker wlc = new WhiteListChecker(this, true, this.loggedUsername, this.session, p.role.equals("admin"));
             //wlc.setVisible(true);
-            
+
         } else {
             System.out.println("Login error: " + p.reason);
 
             JOptionPane.showMessageDialog(this, p.reason, "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-    
     CaptchaPanel cp = new CaptchaPanel(this);
-    
+
     class StreamGobbler extends Thread {
+
         InputStream is;
 
         // reads everything from is until empty.
@@ -1118,7 +1179,7 @@ public class MainFrame extends javax.swing.JFrame {
                 InputStreamReader isr = new InputStreamReader(is);
                 BufferedReader br = new BufferedReader(isr);
                 String line;
-                while ( (line = br.readLine()) != null) {
+                while ((line = br.readLine()) != null) {
                     System.out.println(line);
                 }
             } catch (IOException ioe) {
@@ -1126,7 +1187,6 @@ public class MainFrame extends javax.swing.JFrame {
             }
         }
     }
-    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnChangePassword;
     private javax.swing.JButton btnLaunch;

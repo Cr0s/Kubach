@@ -23,11 +23,14 @@ public class ConfigManager {
     private Properties properties;
     private static final String CONFIG_NAME = "config.properties";
 
+    public String chatlogsDir;
+    
     private ConfigManager() {
         try {
             System.out.println(ClassLoader.getSystemClassLoader().getResource(""));
             this.pathToJar = URLDecoder.decode(new File(ConfigManager.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getParent(), "UTF-8");
-
+            this.chatlogsDir = this.pathToJar + File.separatorChar + "chatlogs";
+            
             Logger.getLogger(ConfigManager.class.getName()).log(Level.INFO, "Path to JAR: " + this.pathToJar);
         } catch (UnsupportedEncodingException | URISyntaxException ex) {
             Logger.getLogger(ConfigManager.class.getName()).log(Level.SEVERE, null, ex);
