@@ -72,9 +72,7 @@ public class LaunchCommandBuilder {
                 .append("./libraries/org/apache/logging/log4j/log4j-api/2.0-beta9/log4j-api-2.0-beta9.jar").append(pathSeparator)
                 .append("./libraries/org/apache/logging/log4j/log4j-core/2.0-beta9/log4j-core-2.0-beta9.jar").append(pathSeparator)
                 .append("./libraries/org/lwjgl/lwjgl/lwjgl/2.9.1/lwjgl-2.9.1.jar").append(pathSeparator)
-                .append("./libraries/org/lwjgl/lwjgl/lwjgl_util/2.9.1/lwjgl_util-2.9.1.jar").append(pathSeparator)
-                .append("./libraries/org/lwjgl/lwjgl/lwjgl-platform/2.9.1/lwjgl-platform-2.9.1-natives-linux.jar").append(pathSeparator)
-                .append("./libraries/net/java/jinput/jinput-platform/2.0.5/jinput-platform-2.0.5-natives-linux.jar").append(pathSeparator)
+                .append("./libraries/org/lwjgl/lwjgl/lwjgl_util/2.9.1/lwjgl_util-2.9.1.jar").append(pathSeparator)              
                 .append("./libraries/tv/twitch/twitch/5.16/twitch-5.16.jar ");
         
         args.append("net.minecraft.launchwrapper.Launch ");
