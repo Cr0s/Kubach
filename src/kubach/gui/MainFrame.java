@@ -456,7 +456,7 @@ public class MainFrame extends javax.swing.JFrame {
         panBg.setLayout(panBgLayout);
         panBgLayout.setHorizontalGroup(
             panBgLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 603, Short.MAX_VALUE)
+            .addGap(0, 508, Short.MAX_VALUE)
         );
         panBgLayout.setVerticalGroup(
             panBgLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -467,7 +467,9 @@ public class MainFrame extends javax.swing.JFrame {
         tabMain.setLayout(tabMainLayout);
         tabMainLayout.setHorizontalGroup(
             tabMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panBg, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(tabMainLayout.createSequentialGroup()
+                .addComponent(panBg, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         tabMainLayout.setVerticalGroup(
             tabMainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -560,7 +562,7 @@ public class MainFrame extends javax.swing.JFrame {
         tabSyncLayout.setHorizontalGroup(
             tabSyncLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(panSync, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(spTblSync, javax.swing.GroupLayout.DEFAULT_SIZE, 603, Short.MAX_VALUE)
+            .addComponent(spTblSync, javax.swing.GroupLayout.DEFAULT_SIZE, 508, Short.MAX_VALUE)
         );
         tabSyncLayout.setVerticalGroup(
             tabSyncLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -585,11 +587,13 @@ public class MainFrame extends javax.swing.JFrame {
         tabOutLog.setLayout(tabOutLogLayout);
         tabOutLogLayout.setHorizontalGroup(
             tabOutLogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(spLog, javax.swing.GroupLayout.DEFAULT_SIZE, 591, Short.MAX_VALUE)
+            .addComponent(spLog, javax.swing.GroupLayout.DEFAULT_SIZE, 496, Short.MAX_VALUE)
         );
         tabOutLogLayout.setVerticalGroup(
             tabOutLogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(spLog, javax.swing.GroupLayout.DEFAULT_SIZE, 452, Short.MAX_VALUE)
+            .addGroup(tabOutLogLayout.createSequentialGroup()
+                .addComponent(spLog, javax.swing.GroupLayout.PREFERRED_SIZE, 416, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         logTabs.addTab("Output", tabOutLog);
@@ -625,14 +629,15 @@ public class MainFrame extends javax.swing.JFrame {
                     .addComponent(scChatDates, javax.swing.GroupLayout.DEFAULT_SIZE, 98, Short.MAX_VALUE)
                     .addComponent(btnRefresh, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(scChatLog, javax.swing.GroupLayout.DEFAULT_SIZE, 487, Short.MAX_VALUE))
+                .addComponent(scChatLog, javax.swing.GroupLayout.DEFAULT_SIZE, 392, Short.MAX_VALUE))
         );
         tabChatLogLayout.setVerticalGroup(
             tabChatLogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(scChatLog)
             .addGroup(tabChatLogLayout.createSequentialGroup()
-                .addComponent(scChatDates, javax.swing.GroupLayout.PREFERRED_SIZE, 421, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(tabChatLogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(scChatLog)
+                    .addComponent(scChatDates, javax.swing.GroupLayout.DEFAULT_SIZE, 411, Short.MAX_VALUE))
+                .addGap(16, 16, 16)
                 .addComponent(btnRefresh)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
@@ -647,7 +652,9 @@ public class MainFrame extends javax.swing.JFrame {
         );
         tabLogLayout.setVerticalGroup(
             tabLogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(logTabs)
+            .addGroup(tabLogLayout.createSequentialGroup()
+                .addComponent(logTabs, javax.swing.GroupLayout.PREFERRED_SIZE, 454, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 5, Short.MAX_VALUE))
         );
 
         tabs.addTab("Log", tabLog);
@@ -721,12 +728,12 @@ public class MainFrame extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addGap(0, 195, Short.MAX_VALUE)
+                        .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(btnChangePassword))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel1)
-                        .addGap(0, 165, Short.MAX_VALUE))
-                    .addComponent(txtNewPassword, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(txtNewPassword))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -827,7 +834,7 @@ public class MainFrame extends javax.swing.JFrame {
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addContainerGap(148, Short.MAX_VALUE)
+                .addContainerGap(86, Short.MAX_VALUE)
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel3)
@@ -849,21 +856,22 @@ public class MainFrame extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addComponent(tabs)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(grbLogin, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(grbLogin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(tabs, javax.swing.GroupLayout.PREFERRED_SIZE, 502, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(layout.createSequentialGroup()
                 .addComponent(grbLogin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(198, 198, 198)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addComponent(tabs, javax.swing.GroupLayout.PREFERRED_SIZE, 502, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
