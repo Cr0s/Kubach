@@ -999,7 +999,7 @@ public class MainFrame extends javax.swing.JFrame {
         }
 
         String osName = System.getProperty("os.name").toLowerCase();
-        boolean isLinux = osName.contains("linux") || osName.contains("unix");
+        boolean isNix = osName.contains("ux") || osName.contains("ix") || osName.contains("mac");
 
         String memValue = cbMemory.getSelectedItem().toString();
         String screenWidth = txtWidth.getText();
@@ -1035,13 +1035,13 @@ public class MainFrame extends javax.swing.JFrame {
             }
         }
 
-        // = *nix Workaround =
+        // = *nix/mac Workaround =
         // Java for some reason won't setup current dir for subprocess correctly
         // So there is workaround which creates temporary shell script and launch it
         // This script changes current dir to gameDir and executes launch command
         final String SCRIPT_NAME = "launch.sh";
 
-        if (isLinux) {
+        if (isNix) {
             try {
                 String scriptPath = gameDir + File.separator + SCRIPT_NAME;
 
@@ -1089,7 +1089,7 @@ public class MainFrame extends javax.swing.JFrame {
         ConfigManager.getInstance().setResolution(screenWidth, screenHeight);
         
         // Disabled for Linux, because if we kill launched process (shell script) we don't actually kill Minecraft process
-        if (!isLinux) {
+        if (!isNix) {
             this.process = proc;
             this.expectExit = false;
 
