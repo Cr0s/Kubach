@@ -9,7 +9,7 @@ import kubach.ConfigManager;
  */
 public class LaunchCommandBuilder {
 
-    public static String getLaunchCommand(String username, String session, String memory) {
+    public static String getLaunchCommand(String username, String session, String memory, String width, String height) {
 
         String forgeVersion = ConfigManager.getInstance().getProperties().getProperty("forgeversion");
         String separator = System.getProperty("file.separator");
@@ -79,11 +79,17 @@ public class LaunchCommandBuilder {
         
         args.append("--username ").append(username).append(" ");
         args.append("--accessToken \"").append(session).append("\" ");
+        args.append("--userProperties {} ");
+        
         args.append("--version ").append(forgeVersion).append(" ");
+        
         args.append("--gameDir \"").append(gameDir).append("\" ");
         args.append("--assetsDir \"").append(gameDir).append(separator).append("assets\" ");
         args.append("--assetIndex ").append(forgeVersion).append(" ");
-        args.append("--userProperties {} ");
+        
+        args.append("--width ").append(width).append(" ");
+        args.append("--height ").append(height).append(" ");
+        
         args.append("--tweakClass cpw.mods.fml.common.launcher.FMLTweaker");
 
         return args.toString();

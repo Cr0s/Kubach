@@ -75,6 +75,11 @@ public class ConfigManager {
         properties.setProperty("password", "");
         properties.setProperty("clientprefix", "ic2");
 
+        // Resolution settings
+        properties.setProperty("screenWidth", "950");
+        properties.setProperty("screenHeight", "550");
+                
+        // URL Settings
         properties.setProperty("serverhost", "kubach.tk");
         properties.setProperty("serverport", "1488");
 
@@ -84,8 +89,10 @@ public class ConfigManager {
         properties.setProperty("skinremoveurl", "http://kubach.tk/removeskin.php");
         properties.setProperty("nativecheckurl", "http://kubach.tk/NativeCheck.class");
 
-        properties.setProperty("forgeversion", "1.6.4-Forge9.11.1.947");
+        // Forge version
+        properties.setProperty("forgeversion", "1.7.10");
 
+        // First launch properties
         properties.setProperty("virgin", "true");
         properties.setProperty("virgincondoms", "http://kubach.tk/update/condoms.package");
 
@@ -128,5 +135,22 @@ public class ConfigManager {
                             : "_unknown";
 
         return prefix;
+    }
+    
+    public String getScreenWidth() {
+        return this.properties.getProperty("screenWidth");
+    }
+    
+    public String getScreenHeight() {
+        return this.properties.getProperty("screenHeight");
+    }    
+    
+    /**
+     * @param w screen width
+     * @param h screen height
+     */
+    public void setResolution(String w, String h) {
+        properties.setProperty("screenWidth", w);
+        properties.setProperty("screenHeight", h);        
     }
 }

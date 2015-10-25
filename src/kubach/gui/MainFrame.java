@@ -355,6 +355,10 @@ public class MainFrame extends javax.swing.JFrame {
         cbMemory = new javax.swing.JComboBox();
         btnLaunch = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
+        txtWidth = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
+        txtHeight = new javax.swing.JTextField();
         jPanel4 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -365,11 +369,11 @@ public class MainFrame extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowClosed(java.awt.event.WindowEvent evt) {
-                formWindowClosed(evt);
-            }
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);
+            }
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
             }
         });
 
@@ -378,14 +382,15 @@ public class MainFrame extends javax.swing.JFrame {
         lblUsername.setText("Username:");
 
         txtUsername.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                txtUsernameKeyPressed(evt);
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtUsernameKeyTyped(evt);
             }
         });
 
         lblPassword.setText("Password:");
 
         btnLogin.setText("Login");
+        btnLogin.setEnabled(false);
         btnLogin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnLoginActionPerformed(evt);
@@ -393,28 +398,14 @@ public class MainFrame extends javax.swing.JFrame {
         });
 
         btnRegister.setText("Register");
+        btnRegister.setEnabled(false);
         btnRegister.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnRegisterActionPerformed(evt);
             }
         });
 
-        txtPassword.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
-            public void propertyChange(java.beans.PropertyChangeEvent evt) {
-                txtPasswordPropertyChange(evt);
-            }
-        });
-        txtPassword.addInputMethodListener(new java.awt.event.InputMethodListener() {
-            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
-                txtPasswordInputMethodTextChanged(evt);
-            }
-            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
-            }
-        });
         txtPassword.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                txtPasswordKeyPressed(evt);
-            }
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtPasswordKeyTyped(evt);
             }
@@ -464,7 +455,7 @@ public class MainFrame extends javax.swing.JFrame {
         );
         panBgLayout.setVerticalGroup(
             panBgLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 477, Short.MAX_VALUE)
+            .addGap(0, 486, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout tabMainLayout = new javax.swing.GroupLayout(tabMain);
@@ -573,7 +564,7 @@ public class MainFrame extends javax.swing.JFrame {
             .addGroup(tabSyncLayout.createSequentialGroup()
                 .addComponent(panSync, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(spTblSync, javax.swing.GroupLayout.DEFAULT_SIZE, 422, Short.MAX_VALUE))
+                .addComponent(spTblSync, javax.swing.GroupLayout.DEFAULT_SIZE, 421, Short.MAX_VALUE))
         );
 
         tabs.addTab("File sync", tabSync);
@@ -595,9 +586,7 @@ public class MainFrame extends javax.swing.JFrame {
         );
         tabOutLogLayout.setVerticalGroup(
             tabOutLogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(tabOutLogLayout.createSequentialGroup()
-                .addComponent(spLog, javax.swing.GroupLayout.PREFERRED_SIZE, 416, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(spLog, javax.swing.GroupLayout.DEFAULT_SIZE, 443, Short.MAX_VALUE)
         );
 
         logTabs.addTab("Output", tabOutLog);
@@ -641,9 +630,9 @@ public class MainFrame extends javax.swing.JFrame {
                 .addGroup(tabChatLogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(scChatLog)
                     .addComponent(scChatDates, javax.swing.GroupLayout.DEFAULT_SIZE, 411, Short.MAX_VALUE))
-                .addGap(16, 16, 16)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnRefresh)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         logTabs.addTab("Chat log", tabChatLog);
@@ -656,9 +645,7 @@ public class MainFrame extends javax.swing.JFrame {
         );
         tabLogLayout.setVerticalGroup(
             tabLogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(tabLogLayout.createSequentialGroup()
-                .addComponent(logTabs, javax.swing.GroupLayout.PREFERRED_SIZE, 454, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 5, Short.MAX_VALUE))
+            .addComponent(logTabs, javax.swing.GroupLayout.PREFERRED_SIZE, 486, Short.MAX_VALUE)
         );
 
         tabs.addTab("Log", tabLog);
@@ -770,7 +757,7 @@ public class MainFrame extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(grbSkin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(262, Short.MAX_VALUE))
+                .addContainerGap(289, Short.MAX_VALUE))
         );
 
         tabs.addTab("My Account", jPanel1);
@@ -796,6 +783,10 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
+        jLabel4.setText("Resolution:");
+
+        jLabel5.setText("X");
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -803,15 +794,24 @@ public class MainFrame extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnLaunch, javax.swing.GroupLayout.DEFAULT_SIZE, 249, Short.MAX_VALUE)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(lblMemory)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cbMemory, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(btnLaunch, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                        .addGap(0, 90, Short.MAX_VALUE)
-                        .addComponent(jButton2)))
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jButton2))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblMemory)
+                            .addComponent(jLabel4))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(txtWidth, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel5)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtHeight, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(cbMemory, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -821,9 +821,16 @@ public class MainFrame extends javax.swing.JFrame {
                     .addComponent(lblMemory)
                     .addComponent(cbMemory, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(txtWidth, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5)
+                    .addComponent(txtHeight, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnLaunch)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton2))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton2)
+                .addContainerGap())
         );
 
         jPanel4.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -838,9 +845,9 @@ public class MainFrame extends javax.swing.JFrame {
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addContainerGap(86, Short.MAX_VALUE)
+                .addContainerGap(74, Short.MAX_VALUE)
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel3)
                 .addContainerGap())
         );
@@ -868,14 +875,14 @@ public class MainFrame extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(tabs, javax.swing.GroupLayout.PREFERRED_SIZE, 502, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(layout.createSequentialGroup()
                 .addComponent(grbLogin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(198, 198, 198)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(tabs))
         );
 
         pack();
@@ -885,10 +892,18 @@ public class MainFrame extends javax.swing.JFrame {
         this.setTitle("Kubach Launcher (v" + Constants.VERSION + ")");
         evt.getWindow().setLocationRelativeTo(evt.getOppositeWindow());
 
+        // Load previously saved credentials
         txtUsername.setText(ConfigManager.getInstance().getProperties().getProperty("username"));
         txtPassword.setText(ConfigManager.getInstance().getProperties().getProperty("password"));
 
+        updateCredentialsEnabled();
+        
+        // Load previously saved memory amount
         cbMemory.setSelectedItem(ConfigManager.getInstance().getProperties().getProperty("memory"));
+        
+        // Load previously saved resolution settings
+        txtWidth.setText(ConfigManager.getInstance().getScreenWidth());
+        txtHeight.setText(ConfigManager.getInstance().getScreenHeight());
     }//GEN-LAST:event_formWindowOpened
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
@@ -929,21 +944,6 @@ public class MainFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnRegisterActionPerformed
 
-    private void txtUsernameKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtUsernameKeyPressed
-    }//GEN-LAST:event_txtUsernameKeyPressed
-
-    private void txtPasswordKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPasswordKeyPressed
-    }//GEN-LAST:event_txtPasswordKeyPressed
-
-    private void txtPasswordPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_txtPasswordPropertyChange
-    }//GEN-LAST:event_txtPasswordPropertyChange
-
-    private void txtPasswordInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_txtPasswordInputMethodTextChanged
-    }//GEN-LAST:event_txtPasswordInputMethodTextChanged
-
-    private void txtPasswordKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPasswordKeyTyped
-    }//GEN-LAST:event_txtPasswordKeyTyped
-
     private void btnUploadSkinActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUploadSkinActionPerformed
         if (fcSkin.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             File skinFile = fcSkin.getSelectedFile();
@@ -979,6 +979,16 @@ public class MainFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnChangePasswordActionPerformed
 
+    private boolean isValidInteger(String i) {
+        try {
+            Integer.parseInt(i);
+        } catch (NumberFormatException nfe) {
+            return false;
+        }
+        
+        return true;
+    }
+    
     private void btnLaunchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLaunchActionPerformed
         if (this.process != null) {
             this.expectExit = true;
@@ -992,7 +1002,23 @@ public class MainFrame extends javax.swing.JFrame {
         boolean isLinux = osName.contains("linux") || osName.contains("unix");
 
         String memValue = cbMemory.getSelectedItem().toString();
-        String launchCommand = LaunchCommandBuilder.getLaunchCommand(this.loggedUsername, this.session, memValue);
+        String screenWidth = txtWidth.getText();
+        String screenHeight = txtHeight.getText();
+        
+        // Validate memory value
+        if (!isValidInteger(memValue)) {
+            JOptionPane.showMessageDialog(this, "Invalid memory value specified!", "Launch error", JOptionPane.ERROR_MESSAGE);
+            return;            
+        }
+        
+        // Validate screenWidth, screenHeight
+        if (!isValidInteger(screenWidth) || !isValidInteger(screenWidth)) {
+            JOptionPane.showMessageDialog(this, "Invalid screen width/height specified!", "Launch error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        String launchCommand = LaunchCommandBuilder.getLaunchCommand(this.loggedUsername, this.session, memValue, screenWidth, screenHeight);
+        
         String gameDir = ConfigManager.getInstance().pathToJar;
         //String jreDir = System.getProperty("java.home") + File.separatorChar + "bin" + File.separatorChar;
         if (this.syncState != SyncState.COMPLETE) {
@@ -1059,6 +1085,9 @@ public class MainFrame extends javax.swing.JFrame {
         ConfigManager.getInstance().getProperties().setProperty("memory", memValue);
         ConfigManager.getInstance().saveProperties();
 
+        // Save screen parameters
+        ConfigManager.getInstance().setResolution(screenWidth, screenHeight);
+        
         // Disabled for Linux, because if we kill launched process (shell script) we don't actually kill Minecraft process
         if (!isLinux) {
             this.process = proc;
@@ -1139,7 +1168,7 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         String memValue = cbMemory.getSelectedItem().toString();
-        String launchCommand = LaunchCommandBuilder.getLaunchCommand(this.loggedUsername, this.session, memValue);
+        String launchCommand = LaunchCommandBuilder.getLaunchCommand(this.loggedUsername, this.session, memValue, txtWidth.getText(), txtHeight.getText());
 
         LaunchCommandDialog lcd = new LaunchCommandDialog(this, true, launchCommand);
         lcd.setVisible(true);
@@ -1180,6 +1209,21 @@ public class MainFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_lbChatDatesMouseClicked
 
+    private void txtUsernameKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtUsernameKeyTyped
+        updateCredentialsEnabled();
+    }//GEN-LAST:event_txtUsernameKeyTyped
+
+    private void txtPasswordKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPasswordKeyTyped
+        updateCredentialsEnabled();
+    }//GEN-LAST:event_txtPasswordKeyTyped
+
+    private void updateCredentialsEnabled() {
+        boolean enabled = !txtUsername.getText().trim().isEmpty() && txtPassword.getPassword().length > 0;
+        
+        btnLogin.setEnabled(enabled);
+        btnRegister.setEnabled(enabled);        
+    }
+    
     private void refreshChatLogs() {
         File dir = new File(ConfigManager.getInstance().chatlogsDir);
         if (!dir.exists()) {
@@ -1273,6 +1317,8 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -1298,9 +1344,11 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JTabbedPane tabs;
     private javax.swing.JTable tblSync;
     private javax.swing.JTextArea txtChatLog;
+    private javax.swing.JTextField txtHeight;
     private javax.swing.JTextArea txtLog;
     private javax.swing.JPasswordField txtNewPassword;
     private javax.swing.JPasswordField txtPassword;
     private javax.swing.JTextField txtUsername;
+    private javax.swing.JTextField txtWidth;
     // End of variables declaration//GEN-END:variables
 }
