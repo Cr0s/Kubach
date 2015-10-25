@@ -96,6 +96,10 @@ public class ConfigManager {
         properties.setProperty("virgin", "true");
         properties.setProperty("virgincondoms", "http://kubach.tk/update/condoms.package");
 
+        // Launcher update properties
+        properties.setProperty("launcherChecksumUrl", "http://kubach.tk/update/launcher/md5.txt");
+        properties.setProperty("launcherDownloadUrl", "http://kubach.tk/update/launcher/Kubach.jar");
+        
         properties.store(propertiesOut, null);
     }
 
@@ -152,5 +156,13 @@ public class ConfigManager {
     public void setResolution(String w, String h) {
         properties.setProperty("screenWidth", w);
         properties.setProperty("screenHeight", h);        
+    }
+
+    public String getLauncherChecksumUrl() {
+        return properties.getProperty("launcherChecksumUrl");
+    }
+    
+    public String getLauncherDownloadUrl() {
+        return properties.getProperty("launcherDownloadUrl");
     }
 }
