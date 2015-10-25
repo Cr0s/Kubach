@@ -31,9 +31,10 @@ public class FirstLaunch extends javax.swing.JFrame {
     }
 
     private void downloadPackage() {
-        // We definitely needs these condoms to lose virginity properly
+        // We definitely needs these condoms to loose virginity properly
         String packageUrl = ConfigManager.getInstance().getProperties().getProperty("virgincondoms");
         
+        // Libraries package
         DownloadFileWorker dfw = new DownloadFileWorker(this, packageUrl, ConfigManager.getInstance().pathToJar + File.separatorChar + "condoms.package");
         dfw.execute();
     }
@@ -198,24 +199,27 @@ public class FirstLaunch extends javax.swing.JFrame {
                 ExtractingDialog ed = new ExtractingDialog(this, true, file, new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        try {
-                            // Loose virginity
-                            ConfigManager.getInstance().getProperties().setProperty("virgin", "false");
-                            ConfigManager.getInstance().saveProperties();
-                            
-                            // Remove used condoms
-                            file.delete();
-                            
-                            // Finally restart
-                            restart();
-                        } catch (IOException ex) {
-                            JOptionPane.showMessageDialog(FirstLaunch.this, "Please restart me\n" + ex.toString(), "I can't restart", JOptionPane.ERROR_MESSAGE);
-                        }
+                        // Loose virginity
+                        ConfigManager.getInstance().getProperties().setProperty("virgin", "false");
+                        ConfigManager.getInstance().saveProperties();                
+
+                        // Remove used condoms
+                        file.delete();                         
+                        
+                        // Download launcher
+                        DownloadFileWorker dfw = new DownloadFileWorker(FirstLaunch.this, ConfigManager.getInstance().getLauncherDownloadUrl(), ConfigManager.getInstance().pathToJar + File.separatorChar + "Kubach.jar");
+                        dfw.execute();                            
                     }
-                    
                 });
                 
-                ed.setVisible(true);
+                ed.setVisible(true);               
+            } else if (file.getName().equals("Kubach.jar")) {                    
+                try {                            
+                    // Finally restart
+                    restart();
+                } catch (IOException ex) {
+                    JOptionPane.showMessageDialog(FirstLaunch.this, "Please restart me\n" + ex.toString(), "I can't restart", JOptionPane.ERROR_MESSAGE);
+                }
             }
         }
     }
