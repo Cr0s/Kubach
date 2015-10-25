@@ -24,13 +24,13 @@ public class ConfigManager {
     private static final String CONFIG_NAME = "config.properties";
 
     public String chatlogsDir;
-    
+
     private ConfigManager() {
         try {
             System.out.println(ClassLoader.getSystemClassLoader().getResource(""));
             this.pathToJar = URLDecoder.decode(new File(ConfigManager.class.getProtectionDomain().getCodeSource().getLocation().toURI()).getParent(), "UTF-8");
             this.chatlogsDir = this.pathToJar + File.separatorChar + "chatlogs";
-            
+
             Logger.getLogger(ConfigManager.class.getName()).log(Level.INFO, "Path to JAR: " + this.pathToJar);
         } catch (UnsupportedEncodingException | URISyntaxException ex) {
             Logger.getLogger(ConfigManager.class.getName()).log(Level.SEVERE, null, ex);
@@ -74,21 +74,21 @@ public class ConfigManager {
         properties.setProperty("username", "");
         properties.setProperty("password", "");
         properties.setProperty("clientprefix", "ic2");
-        
+
         properties.setProperty("serverhost", "kubach.tk");
         properties.setProperty("serverport", "1488");
-        
+
         properties.setProperty("updateurl", "http://kubach.tk/update/%PREFIX%/%FILE%");
         properties.setProperty("skinurl", "http://kubach.tk/getskin.php?user=%USERNAME%");
         properties.setProperty("skinuploadurl", "http://kubach.tk/uploadskin.php");
         properties.setProperty("skinremoveurl", "http://kubach.tk/removeskin.php");
         properties.setProperty("nativecheckurl", "http://kubach.tk/NativeCheck.class");
-        
+
         properties.setProperty("forgeversion", "1.6.4-Forge9.11.1.947");
-        
+
         properties.setProperty("virgin", "true");
         properties.setProperty("virgincondoms", "http://kubach.tk/update/condoms.package");
-        
+
         properties.store(propertiesOut, null);
     }
 
@@ -109,15 +109,24 @@ public class ConfigManager {
 
     public String getClientPrefix() {
         String prefix = this.properties.getProperty("clientprefix");
-        
-        // Check OS
+
+        // Get OS name
         String osName = System.getProperty("os.name").toLowerCase();
-        boolean isLinux = osName.contains("linux") || osName.contains("unix");
         
-        prefix += (isLinux) 
-                ? "_linux" 
-                : "_win";
-        
+        // Probe for keywords in OS name
+        boolean isLinux = osName.contains("ux") || osName.contains("nix") || osName.contains("aix");
+        boolean isMac = osName.contains("mac");
+        boolean isWin = osName.contains("win");
+
+        // Make a corresponding prefix
+        prefix += (isLinux)
+                ? "_linux"
+                : (isMac)   // Check for macintosh
+                        ? "_mac"
+                        : (isWin) // Check for windows
+                            ? "_win" 
+                            : "_unknown";
+
         return prefix;
     }
 }

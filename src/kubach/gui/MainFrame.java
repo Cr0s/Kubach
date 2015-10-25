@@ -288,8 +288,12 @@ public class MainFrame extends javax.swing.JFrame {
     public MainFrame() {
         initComponents();
 
-        NativeLibrary.addSearchPath("Cr0s", ConfigManager.getInstance().pathToJar);        
-        
+        /*try {
+            NativeLibrary.addSearchPath("Cr0s", ConfigManager.getInstance().pathToJar);        
+        } catch (Exception e) {
+            e.printStackTrace();
+        }*/
+            
         LogoPanel lp = new LogoPanel(panBg);
         panBg.add(lp);
 
